@@ -169,3 +169,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/java,macos,linux,windows,terraform,visualstudiocode
+
+# .env
+.env
+
+# Postgres
+postgres-data

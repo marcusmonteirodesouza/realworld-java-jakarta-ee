@@ -39,4 +39,17 @@
 
     <!-- Default SSL configuration enables trust for default certificates from the Java runtime -->
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+
+      <!-- Datasource Configuration -->
+      <library id="postgres">
+        <fileset dir="${shared.resource.dir}/" includes="*.jar" />
+    </library>
+
+      <dataSource id="DefaultDataSource" jndiName="jdbc/realworldpostgres">
+        <jdbcDriver libraryRef="postgres"/>
+        <properties.postgresql serverName="${PGHOST}" portNumber="${PGPORT}"
+                    databaseName="${PGDATABASE}"
+                    user="${PGUSERNAME}"
+                    password="${PGPASSWORD}"/>
+    </dataSource>
 </server>
