@@ -7,8 +7,6 @@ import com.marcusmonteirodesouza.rest.user.resources.users.dto.RegisterUserReque
 import com.marcusmonteirodesouza.rest.user.resources.users.dto.UserResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -21,8 +19,6 @@ import java.util.logging.Logger;
 @ApplicationScoped
 @Path("/")
 public class UserResource {
-    private static final Jsonb jsonb = JsonbBuilder.create();
-
     private final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
     @Inject private UserRepository userRepository;
@@ -34,9 +30,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public String registerUser(String requestJson) throws AlreadyExistsException {
-        var request = UserResource.jsonb.fromJson(requestJson, RegisterUserRequest.class);
-
+    public UserResponse registerUser(RegisterUserRequest request) throws AlreadyExistsException {
         logger.info(
                 "Registering User. Username: "
                         + request.user.username
@@ -49,12 +43,7 @@ public class UserResource {
 
         var token = authService.createJWT(user);
 
-        return jsonb.toJson(
-                new UserResponse(
-                        user.getEmail(),
-                        user.getUsername(),
-                        token,
-                        user.getBio(),
-                        user.getImage()));
+        return new UserResponse(
+                user.getEmail(), user.getUsername(), token, user.getBio(), user.getImage());
     }
 }
